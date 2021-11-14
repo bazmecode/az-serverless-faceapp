@@ -1,0 +1,15 @@
+{
+  "name": "azurefn",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
+  },
+  "dependencies": {
+    "@azure/data-tables": "^13.0.0",
+    "@azure/storage-queue": "^12.7.0",
+    "uuidv4": "^6.2.12"
+  },
+  "devDependencies": {}
+}
