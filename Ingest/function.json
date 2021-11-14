@@ -1,0 +1,11 @@
+{
+  "bindings": [
+    {
+      "name": "myBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "faces",
+      "connection": "serverlessfaceapp_STORAGE"
+    }
+  ]
+}
