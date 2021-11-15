@@ -1,0 +1,11 @@
+{
+  "bindings": [
+    {
+      "name": "EmailFn",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "notification",
+      "connection": "serverlessfaceapp_STORAGE"
+    }
+  ]
+}

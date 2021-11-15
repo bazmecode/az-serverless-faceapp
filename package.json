@@ -12,6 +12,7 @@
     "@azure/data-tables": "^13.0.0",
     "@azure/ms-rest-azure-js": "^2.1.0",
     "@azure/storage-queue": "^12.7.0",
+    "@sendgrid/mail": "^7.6.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {}
