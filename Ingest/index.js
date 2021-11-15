@@ -1,57 +1,66 @@
 const { TableClient, AzureSASCredential } = require("@azure/data-tables");
 const { QueueServiceClient } = require("@azure/storage-queue");
-const { uuid } = require("uuidv4");
-const person_table = "persons";
+const { v4: uuidv4 } = require("uuid");
+
+// constants
+const customer_table = "customers";
 const identification_queue = "identification";
+
+// environment variables
 const account = process.env["AccountName"];
 const sas = process.env["SASToken"];
 
 module.exports = async function (context, myBlob) {
   // blob event capture
+  context.log("\n\n");
+  context.log("========INGEST FUNCTION========");
   context.log(
-    "JavaScript blob trigger function processed blob \n Blob:",
+    "New blob available for processing \n Blob:",
     context.bindingData.blobTrigger,
     "\n Blob Size:",
     myBlob.length,
     "Bytes"
   );
 
-  context.log("Adding person");
-
-  //addPerson(context, context.bindingData.blobTrigger.replace(/\//g, ''), context.bindingData.uri);
-  //const blobName = context.bindingData.blobTrigger.replace(/\//g, '');
+  context.log("Adding new entry in customers table");
   const blobUri = context.bindingData.uri;
 
   try {
-    // create an entry in persons table
-    const personTblClient = new TableClient(
+    // create an entry in customers table
+    const customerTblClient = new TableClient(
       `https://${account}.table.core.windows.net`,
-      person_table,
+      customer_table,
       new AzureSASCredential(sas)
     );
 
-    const personId = uuid();
-    const personEntity = {
-      partitionKey: "coderhq_faces",
-      rowKey: personId,
-      BlobUri: blobUri,
+    const id = uuidv4();
+    context.log("Creating customer with id: " + id);
+    const customerEntity = {
+      partitionKey: "codershq_faces",
+      rowKey: id,
+      blobUri: blobUri,
+      identificationComplete: false,
+      personId: "",
     };
-    personTblClient.createEntity(personEntity);
-    context.log("Person added successfully");
+    await customerTblClient.createEntity(customerEntity);
+    context.log("Customer created successfully with id: " + id);
 
     // add a message on face queue
+    context.log("Adding new message on identification queue message: " + id);
     const queueServiceClient = new QueueServiceClient(
       `https://${account}.queue.core.windows.net${sas}`
     );
 
     const identificationQueue =
       queueServiceClient.getQueueClient(identification_queue);
-    const sendMessageResponse = await identificationQueue.sendMessage(personId);
-    console.log(
+    const sendMessageResponse = await identificationQueue.sendMessage(
+      Buffer.from(id).toString("base64")
+    );
+    context.log(
       `Sent message successfully, service assigned message Id: ${sendMessageResponse.messageId}, service assigned request Id: ${sendMessageResponse.requestId}`
     );
   } catch (e) {
-    context.log("addPerson exception:");
+    context.log("Ingest exception:");
     context.log(e);
   }
 };

@@ -1,10 +1,10 @@
 {
   "bindings": [
     {
-      "name": "IngestFn",
-      "type": "blobTrigger",
+      "name": "FaceFn",
+      "type": "queueTrigger",
       "direction": "in",
-      "path": "faces",
+      "queueName": "identification",
       "connection": "serverlessfaceapp_STORAGE"
     }
   ]
