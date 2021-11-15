@@ -53,7 +53,7 @@ module.exports = async function (context, queueMessage) {
     from: fromEmail,
     subject: "ServerlessFaceApp - Duplicate customer found!",
     html:
-      `Hi, <br/>` +
+      `Hi, <br/><br/>` +
       `CustomerId <strong>${customerId}</strong> is a duplicate of CustomerId <strong>${duplicateEntity.duplicateOfCustomer}</strong> with ` +
       `a confidence score of:<strong>${duplicateEntity.confidence}</strong>` +
       `<br/><br/>Thanks,`,
