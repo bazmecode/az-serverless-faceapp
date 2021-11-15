@@ -29,7 +29,7 @@ module.exports = async function (context, customerId) {
   context.log("\n\n");
   context.log("========FACE FUNCTION========");
   context.log(
-    "New message available on identifications queue for processing:",
+    "New message available on identification queue for processing:",
     customerId
   );
 
@@ -152,7 +152,7 @@ module.exports = async function (context, customerId) {
       const notificationQueue =
         queueServiceClient.getQueueClient(notification_queue);
       const sendMessageResponse = await notificationQueue.sendMessage(
-        Buffer.from(customer.rowKey).toString("base64")
+        Buffer.from(customer.rowKey + "|" + id).toString("base64")
       );
       context.log(
         `Sent message successfully, service assigned message Id: ${sendMessageResponse.messageId}, service assigned request Id: ${sendMessageResponse.requestId}`
