@@ -1,3 +1,4 @@
+//imports
 const { TableClient, AzureSASCredential } = require("@azure/data-tables");
 const { QueueServiceClient } = require("@azure/storage-queue");
 const { v4: uuidv4 } = require("uuid");

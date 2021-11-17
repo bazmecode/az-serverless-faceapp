@@ -1,3 +1,4 @@
+// imports
 const sgMail = require("@sendgrid/mail");
 const { TableClient, AzureSASCredential } = require("@azure/data-tables");
 
